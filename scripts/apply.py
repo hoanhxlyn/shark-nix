@@ -8,7 +8,7 @@ declared fields are changed, exactly like ``x11ctl`` does.
 import json
 import sys
 
-from sharkx11 import config, device, protocol as p
+from sharkx11 import config, device, discovery, protocol as p
 
 
 def action(text):
@@ -18,6 +18,9 @@ def action(text):
 def main(path):
     with open(path, encoding="utf-8") as f:
         cfg = json.load(f)
+
+    if not any(discovery.find_devices()):
+        return  # nothing plugged in: the login start has nothing to apply
 
     dev = device.Device()
     try:
